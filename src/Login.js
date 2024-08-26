@@ -39,7 +39,7 @@ console.log(authData)
 localStorage.setItem('user',JSON.stringify(authData))
 
 toast.success("User logged in scuessfully")
-navigate('/')
+window.location.href='/'
     }catch(e){
 toast.error("Server error please try again")
     }
