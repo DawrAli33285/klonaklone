@@ -1,13 +1,41 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+#root {
+  background-color: #060610;
+  height: 100%;
+  box-sizing: border-box;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.custom-divider .ant-menu-item-divider {
+  border-color: #25273f !important;
 }
+
+:where(.css-dev-only-do-not-override-1gwfwyx).ant-menu .ant-menu-item-divider {
+  border-color: #25273f !important;
+  width: 80%;
+  margin-inline: auto;
+}
+
+
+
+:where(.css-dev-only-do-not-override-1gwfwyx).ant-menu-dark .ant-menu-item-selected,
+:where(.css-dev-only-do-not-override-1gwfwyx).ant-menu-dark>.ant-menu .ant-menu-item-selected {
+  background-color: #c0b3f9 !important;
+  color: black !important;
+}
+
+
+:where(.css-dev-only-do-not-override-1gwfwyx).ant-menu-dark .ant-menu-item:not(.ant-menu-item-selected):not(.ant-menu-submenu-selected):hover,
+:where(.css-dev-only-do-not-override-1gwfwyx).ant-menu-dark>.ant-menu .ant-menu-item:not(.ant-menu-item-selected):not(.ant-menu-submenu-selected):hover,
+:where(.css-dev-only-do-not-override-1gwfwyx).ant-menu-dark .ant-menu-item:not(.ant-menu-item-selected):not(.ant-menu-submenu-selected)>.ant-menu-submenu-title:hover,
+:where(.css-dev-only-do-not-override-1gwfwyx).ant-menu-dark>.ant-menu .ant-menu-item:not(.ant-menu-item-selected):not(.ant-menu-submenu-selected)>.ant-menu-submenu-title:hover {
+  background-color: #c0b3f9 !important;
+  color: black !important;
+}
+
+.custom-menu .ant-menu-item:hover .ant-menu-title-content,
+.custom-menu .ant-menu-item:hover .ant-menu-item-icon {
+  color: black !important;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

@@ -1,17 +1,42 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+import Loggedin from './middleware/Loggedin';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import NavBar from './components/navbar';
+import Login from './Login';
+import Subscription from './Subscription';
+import Register from './Register';
+import { FilterContextProvider } from './context/filterContext';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <Router>
+    <GoogleOAuthProvider clientId="87856424688-nhil5aauafjgorqfrnt432sf2gg66a4k.apps.googleusercontent.com">
+              
+      <FilterContextProvider>
+        <NavBar>
+          <Routes>
+            {/* Protected Routes */}
+            <Route path="/" element={<Loggedin />}>
+              <Route index element={<App />} />
+              <Route path="subscription" element={<Subscription />} />
+            </Route>
+
+            {/* Public Routes */}
+           
+            <Route path="/login" element={<Login />} />
+             
+            <Route path="/register" element={<Register />} />
+          </Routes>
+        </NavBar>
+      </FilterContextProvider>
+      </GoogleOAuthProvider>
+    </Router>
   </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
