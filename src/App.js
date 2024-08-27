@@ -71,7 +71,7 @@ const fetchBots=async()=>{
     console.log("PB")
  if(pb){
   const records = await pb.collection('user_modes').getFullList();
-  const resultList = await pb.collection('Chatbots').getList(1,4);
+  const resultList = await pb.collection('Chatbots').getList(1,50);
   const recordsTags = await pb.collection('tags').getFullList();
   setTags(recordsTags)
  
@@ -133,7 +133,7 @@ fetchBots();
     console.log("PB")
  if(pb){
   const records = await pb.collection('user_modes').getFullList();
-  const resultList = await pb.collection('Chatbots').getList(1,4);
+  const resultList = await pb.collection('Chatbots').getList(1,50);
   setBots(resultList.items)
 
 console.log("resultList")
@@ -164,7 +164,7 @@ console.log(resultList)
       console.log("PB")
    if(pb){
     const records = await pb.collection('user_modes').getFullList();
-    const resultList = await pb.collection('Chatbots').getList(1,4);
+    const resultList = await pb.collection('Chatbots').getList(1,50);
      const recordsTags = await pb.collection('tags').getFullList();
      let updateResultList = resultList.items.map((val) => {
     
