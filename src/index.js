@@ -11,6 +11,8 @@ import Subscription from './Subscription';
 import Register from './Register';
 import { FilterContextProvider } from './context/filterContext';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import Chat from './Chat';
+import Profile from './Profile';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
@@ -24,6 +26,8 @@ root.render(
             <Route path="/" element={<Loggedin />}>
               <Route index element={<App />} />
               <Route path="subscription" element={<Subscription />} />
+              <Route path="chat" element={<Chat />} />
+              <Route path="profile" element={<Profile />} />
             </Route>
 
             {/* Public Routes */}
@@ -31,6 +35,7 @@ root.render(
             <Route path="/login" element={<Login />} />
              
             <Route path="/register" element={<Register />} />
+            
           </Routes>
         </NavBar>
       </FilterContextProvider>

@@ -61,8 +61,8 @@ export default function NavBar({ children }) {
         if(localStorage.getItem('user')){
             let user=JSON.parse(localStorage.getItem('user'))
             if(user){
-                console.log("USER")
-                console.log(user)
+             
+              
                 setCurrentUser(user)
             }
             
@@ -74,12 +74,13 @@ export default function NavBar({ children }) {
      
     }, []);
     const handleMenuClick = ({ key }) => {
+        setVisible(!visible);
         switch (key) {
             case '1':
                 navigate('/');
                 break;
             case '2':
-                navigate('/recent-chats');
+                navigate('/chat?id=5bg7d0trgmudz0d');
                 break;
             case '3':
                 navigate('/profile');
@@ -132,7 +133,7 @@ export default function NavBar({ children }) {
                                 />
                                 <span className='flex flex-col'>
                                     <p className='text-white text-[18px]'>{currentUser?.record?.username}</p>
-                                    <p className='text-white text-[10x]'>{currentUser?.record?.email}</p>
+                                    <p className='text-white text-[10px]'>{currentUser?.record?.email}</p>
                                 </span>
                             </div>
                         </div>
@@ -157,7 +158,7 @@ export default function NavBar({ children }) {
                                     {
                                         key: '2',
                                         icon: <VideoCameraOutlined />,
-                                        label: 'Recent Chats',
+                                        label: 'Chats',
                                     },
                                     {
                                         key: '3',
@@ -252,7 +253,7 @@ export default function NavBar({ children }) {
                                     {
                                         key: '2',
                                         icon: <VideoCameraOutlined />,
-                                        label: 'Recent Chats',
+                                        label: 'Chats',
                                     },
                                     {
                                         key: '3',

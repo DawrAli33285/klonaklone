@@ -318,7 +318,9 @@ useEffect(()=>{
           {
            bots?.length>0?bots?.map(pep => {
               return (
-                <div className='card bg-gradient-to-r from-[#1d162d] to-[#422066] w-full flex flex-col gap-[6px] rounded-[20px] border relative'>
+                <div onClick={()=>{
+                  navigate(`/chat?id=${pep?.id}`)
+                }} className='card bg-gradient-to-r cursor-pointer from-[#1d162d] to-[#422066] w-full flex flex-col gap-[6px] rounded-[20px] border relative'>
                   <div className='w-full h-[190px] relative'>
                     <img src={pep?.Pic} alt="img" className='w-full h-full object-cover border-t rounded-t-[20px]' />
                     <div className='absolute w-full flex items-center justify-between top-0 left-0 p-[10px]'>

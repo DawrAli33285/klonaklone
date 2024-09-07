@@ -1,0 +1,45 @@
+.chatbox-desktop {
+  grid-template-columns: 25% 55% 20%;
+}
+.ai-message-container {
+  background-color: #3a3557b5;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+.user-message{
+    flex-direction: row-reverse;
+}
+.user-message-container{
+    align-self: flex-end;
+    background-color: black;
+    border-top-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+.aimessage-date {
+  align-self: flex-end;
+}
+.chat-input{
+    width: 90%;
+    border-radius: 20px;
+    background-color: black;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 2rem;
+    padding-block: 10px;
+    padding-inline: 10px;
+    border:2px solid white;
+    display: flex;
+    justify-content: space-between;
+}
+.chtinput{
+    background-color: transparent;
+    width: 90%;
+}
+@media(max-width:1023px){
+    .chat-input{
+        position: fixed !important;
+    }
+}
