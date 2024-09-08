@@ -144,11 +144,11 @@ getProfile()
                 <span className="flex  gap-[20px]">
                     <span className="flex gap-[10px] items-center">
                         <span className="w-[60px] h-[60px] rounded-[100%]">
-                            <img className="w-[60px] h-[60px] rounded-[100%] object-cover" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREUqvhrHaD2mp0NdQQT5PHw6AJrRDRPmWNgg&s" />
+                            <img className="w-[60px] h-[60px] rounded-[100%] object-cover" src={currentUser?.avatar?.length>0?`http://data.gmini.ai/api/files/yttfv3r7vgmd959/${currentUser?.id}/${currentUser?.avatar}`:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREUqvhrHaD2mp0NdQQT5PHw6AJrRDRPmWNgg&s" } />
                         </span>
                         <span className="flex flex-col">
-                            <p className="text-[16px] font-bold text-white m-0">Yuri</p>
-                            <p className="text-[10px] text-[#CFCFCF] m-0">@yurichen</p>
+                            <p className="text-[16px] font-bold text-white m-0">{currentUser?.name?currentUser?.name:currentUser?.username}</p>
+                            <p className="text-[10px] text-[#CFCFCF] m-0">@{currentUser?.username}</p>
                         </span>
                     </span>
                     <span className="flex gap-[6px] items-center">
