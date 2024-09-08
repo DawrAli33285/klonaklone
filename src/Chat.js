@@ -340,7 +340,7 @@ setLoading(false)
                                      
                                return <div key={message?.user_id} className="w-full user-message flex gap-[10px]">
                                 <div className="w-[10%] h-[50px] rounded-[100%] ">
-                                    <img   src={`http://data.gmini.ai/api/files/yttfv3r7vgmd959/${chatBot?.id}/`+chatBot?.Pic} alt={chatBot?.Name} className="w-full h-full rounded-[100%]" />
+                                    <img  src={currentUser?.avatar?currentUser?.avatar:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT5aCMO24e6ZTz7_TTUdoqiclVyuhAzV0kFw&s"} alt={chatBot?.Name} className="w-full h-full rounded-[100%]" />
                                 </div>
                                 <div className="flex flex-col gap-[10px] w-[80%]">
                                     <span className="w-fit py-[10px] px-[20px] flex flex-col user-message-container">
@@ -579,7 +579,7 @@ return        <div className="w-full ai-message flex gap-[10px]">
      }else{
 return    <div className="w-full user-message flex gap-[10px]">
 <div className="w-[20%] h-[50px] rounded-[100%] ">
-    <img   src={`http://data.gmini.ai/api/files/yttfv3r7vgmd959/${chatBot?.id}/`+chatBot?.Pic} alt={chatBot?.Name} className="w-full h-full rounded-[100%]" />
+    <img   src={currentUser?.avatar?currentUser?.avatar:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT5aCMO24e6ZTz7_TTUdoqiclVyuhAzV0kFw&s"} alt={chatBot?.Name} className="w-full h-full rounded-[100%]" />
 </div>
 <div className="flex flex-col gap-[10px] w-[80%]">
     <span className="w-fit py-[10px] px-[20px] flex flex-col user-message-container">
