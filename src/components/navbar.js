@@ -1,6 +1,6 @@
 import Flag from 'react-flagkit';
 import { useContext, useEffect, useRef, useState } from 'react';
-import { FaHome, FaCalendarAlt, FaShoppingCart, FaCog, FaQuestion, FaQuestionCircle,FaKey } from 'react-icons/fa';
+import { FaHome, FaCalendarAlt, FaShoppingCart, FaCog, FaQuestion, FaQuestionCircle,FaGamepad,FaKey } from 'react-icons/fa';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
     MenuFoldOutlined,
@@ -96,6 +96,8 @@ export default function NavBar({ children }) {
                     break;
                     case '8':
                         navigate('/login')
+                        case '9':
+                            navigate('/game')
             default:
                 break;
         }
@@ -179,6 +181,11 @@ export default function NavBar({ children }) {
                                         key: '8',
                                         icon: <FaKey />,
                                         label: 'Login',
+                                    },
+                                    {
+                                        key: '9',
+                                        icon: <FaGamepad />,
+                                        label: 'Game',
                                     },
                                 ],
                             },
@@ -274,6 +281,11 @@ export default function NavBar({ children }) {
                                         key: '8',
                                         icon: <FaKey />,
                                         label: 'Login',
+                                    },
+                                    {
+                                        key: '9',
+                                        icon: <FaGamepad />,
+                                        label: 'Game    ',
                                     },
                                 ],
                             },
