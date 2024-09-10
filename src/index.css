@@ -1,9 +1,22 @@
+:root {
+  --offset: 200px;
+  /* The amount to subtract */
+}
+
 #root {
   background-color: #060610;
   height: 100%;
   box-sizing: border-box;
 }
 
+@media(min-width:1024px) {
+  .main-data-container {
+    flex: 1;
+  }
+}
+.main-data-container{
+  width:100%;
+}
 .custom-divider .ant-menu-item-divider {
   border-color: #25273f !important;
 }
@@ -13,18 +26,21 @@
   width: 80%;
   margin-inline: auto;
 }
+
 /* WebKit Browsers (Chrome, Safari) */
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #6a0dad; /* Dark purple */
+  background-color: #6a0dad;
+  /* Dark purple */
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background-color: #2c003e; /* Even darker background */
+  background-color: #2c003e;
+  /* Even darker background */
   border-radius: 10px;
 }
 

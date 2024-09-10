@@ -1,0 +1,23 @@
+.desktop-aiprofile {
+  display: none;
+}
+.desktop-numbering{
+  grid-template-columns: 30% 50% 15%;
+  gap: 20px;
+}
+@media (min-width: 768px) {
+  .desktop-aiprofile {
+    display: grid;
+    grid-template-columns: 20% 80%;
+  }
+  .mobile-aiprofile{
+    display: none;
+  }
+}
+.slick-slide {
+  margin-right: 10px; /* Adjust this value for the gap you need */
+}
+
+.slick-list {
+  margin-right: -10px; /* To ensure the last slide does not get cut off */
+}

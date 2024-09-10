@@ -106,7 +106,7 @@ export default function NavBar({ children }) {
         return `${words?.slice(0, maxWords).join(' ')}...`;
       };
     return (
-        <div className='w-full flex flex-wrap relative min-h-[100vh] max-h-scrollable overflow-y-scroll '>
+        <div className='w-full flex  relative min-h-[100vh] max-h-scrollable overflow-y-scroll '>
             <div className={`${visible ? 'block' : 'hidden'} lg:hidden fixed top-0 left-0 h-full z-50`}>
                 <Sider
                     trigger={null}
@@ -302,7 +302,7 @@ export default function NavBar({ children }) {
 
                 </Sider>
             </div>
-            <div className='w-full lg:w-[80%]'>
+            <div className='main-data-container'>
                 <navbar className="w-full  flex justify-between items-center py-[10px] pl-[40px] pr-[80px] border-b-[1px] border-[#25273f]">
                     <h2 className='text-white text-[24px] hidden md:flex'>Home</h2>
                     <div className='flex -mx-[1rem] w-[100%] flex-row justify-between '>

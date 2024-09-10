@@ -13,6 +13,8 @@ import { FilterContextProvider } from './context/filterContext';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import Chat from './Chat';
 import Profile from './Profile';
+import BotProfile from './BotProfile';
+import GamePage from './GamePate';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
@@ -28,7 +30,9 @@ root.render(
               <Route path="subscription" element={<Subscription />} />
               <Route path="chat" element={<Chat />} />
               <Route path="profile" element={<Profile />} />
-            </Route>
+              <Route path="/aiprofile" element={<BotProfile />} />
+              <Route path="/game" element={<GamePage />} />
+             </Route>
 
             {/* Public Routes */}
            

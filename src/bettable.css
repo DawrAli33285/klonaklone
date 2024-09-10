@@ -1,0 +1,40 @@
+.table-container {
+    background-color: #1d162d69;
+    /* Table background color */
+    border-radius: 20px;
+    /* Border radius for the table container */
+    padding: 10px;
+    /* Padding around the table */
+}
+
+table {
+    width: 100%;
+    /* Full width of the container */
+    border-collapse: collapse;
+    /* Collapse borders between cells */
+}
+
+th,
+td {
+    text-align: left;
+    /* Align text to the left */
+    padding: 10px;
+    /* Padding inside cells */
+    color: #CFCFCF;
+    /* Text color for table data */
+}
+
+thead th {
+    border-bottom: 1px solid #25273F;
+    /* Border below table headers */
+}
+
+tbody tr {
+    border-bottom: 1px solid #25273F;
+    /* Border below each row */
+}
+
+tbody tr:last-child {
+    border-bottom: none;
+    /* Remove border for the last row */
+}
