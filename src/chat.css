@@ -43,3 +43,9 @@
         position: fixed !important;
     }
 }
+@media(max-width:768px){
+  .chat-input{
+    justify-content: start;
+    gap:10px;
+  }
+}

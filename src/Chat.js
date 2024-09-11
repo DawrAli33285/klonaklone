@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import "./chat.css";
 import { useLocation } from "react-router-dom";
 import PocketBase from 'pocketbase';
+import axios from "axios";
+import { toast,ToastContainer } from "react-toastify";
 
 
 export default function Chat() {
@@ -102,16 +104,19 @@ export default function Chat() {
                         } catch (error) {
                             console.error(`Error fetching data for chatbot_id ${val?.chatbot_id}:`, error);
                             // Return the original record if there's an error
+                            toast.error("Server error please try again")
                             return val;
                         }
                     }));
                     setMessageHistory(updatedMessageHistory)
-                    console.log("MESSAGE HISTORY")
-                    console.log(updatedMessageHistory)
-                    setMessages(foundrecord)
+                    
+                    const sortedMessages = foundrecord.sort((a, b) => new Date(a.created) - new Date(b.created));
+
+                    setMessages(sortedMessages)
                     setLoading(false)
 
                 }).catch((error) => {
+                    toast.error("Server error while fetching tags")
                     console.error('Error fetching tags:', error);
                 });
                 let userLocal = localStorage.getItem('user')
@@ -151,13 +156,15 @@ export default function Chat() {
                 let userLocaltwo = localStorage.getItem('user')
                 let userLocalstoragetwo = JSON.parse(userLocal)
                 let foundrecord = recordhistory.filter(history => history.chatbot_id === id && history?.user_id == userLocalstorage?.record?.id);
+                const sortedMessages = foundrecord.sort((a, b) => new Date(a.created) - new Date(b.created));
 
 
 
-                setMessages(foundrecord)
+                setMessages(sortedMessages)
                 setLoading(false)
 
             }).catch((error) => {
+                toast.error("Server error fetching tags please try again")
                 console.error('Error fetching tags:', error);
             });
             let userLocal = localStorage.getItem('user')
@@ -166,7 +173,7 @@ export default function Chat() {
 
 
         } catch (e) {
-
+toast.error("Server error please try again")
         }
     }
     const formatDate = (dateString) => {
@@ -176,54 +183,98 @@ export default function Chat() {
     };
 
     const sendMessage = async () => {
-        setLoading(false)
+        setLoading(false);
         try {
             const url = 'http://data.gmini.ai/api/collections/conversations/records';
-
+    
             const data = {
                 "user_id": currentUser?.record?.id,
                 "chatbot_id": chatBot?.id
             };
-
+    
+            // Check if a conversation exists
             const conversation_history = await pb.collection('conversations').getFullList({
                 sort: '-created',
             });
-            let coversation_found = conversation_history.find(u => u.chatbot_id == chatBot?.id && u.user_id == currentUser?.record?.id)
-
-            if (coversation_found) {
-
-                const chatmessage = {
-                    "conversation_id": coversation_found.id,
+    
+            let conversation_found = conversation_history.find(
+                u => u.chatbot_id == chatBot?.id && u.user_id == currentUser?.record?.id
+            );
+    
+            let chatmessage;
+            let messagerecord;
+    
+            if (conversation_found) {
+                // Existing conversation: create the user message
+                chatmessage = {
+                    "conversation_id": conversation_found.id,
                     "user_id": currentUser?.record.id,
                     "chatbot_id": chatBot?.id,
                     "role": "user",
                     "message_content": currentMessage,
+                    "created": new Date().toISOString().replace('T', ' ').replace('Z', 'Z')
                 };
-                const messagerecord = await pb.collection('conversation_history').create(chatmessage);
-                console.log("RECORD")
-                console.log(messagerecord)
-                setMessages((prev) => {
-                    let old = [...prev, messagerecord]
-                    return old
-                })
-                setCurrentMessage("")
+                // messagerecord = await pb.collection('conversation_history').create(chatmessage);
+                            // Send bot request
+            let botData = {
+                "user_id": currentUser?.record?.id,
+                "chatbot_id": chatBot?.id,
+                "user_message": currentMessage,
+                "token": currentUser?.token,
+                "message_content": '',
+                "role": "assistant"
+            };
+    
+            let botresponse = await axios.post(`http://45.79.218.138:5000/chat`, botData);
+    
+            // Append the bot's response
+            botData = {
+                ...botData,
+                "message_content": botresponse?.data?.assistant_message,
+                "created": new Date().toISOString().replace('T', ' ').replace('Z', 'Z')
+            };
+    
+            // Add bot message to messages
+            setMessages(prevMessages => [...prevMessages, chatmessage,botData]);
             } else {
+                // New conversation: create a conversation record
                 const record = await pb.collection('conversations').create(data);
-
-                const chatmessage = {
+    
+                // Create user message for the new conversation
+                chatmessage = {
                     "conversation_id": record.id,
                     "user_id": currentUser?.record.id,
                     "chatbot_id": chatBot?.id,
                     "role": "user",
                     "message_content": currentMessage,
+                    "created": new Date().toISOString().replace('T', ' ').replace('Z', 'Z')
                 };
-                const messagerecord = await pb.collection('conversation_history').create(chatmessage);
-                console.log("RECORD")
-                console.log(messagerecord)
-                setMessages([messagerecord])
-                setCurrentMessage("")
-                setMessageHistory((prev) => {
-                    let data = {
+                // messagerecord = await pb.collection('conversation_history').create(chatmessage);
+                // Send bot request
+                let botData = {
+                    "user_id": currentUser?.record?.id,
+                    "chatbot_id": chatBot?.id,
+                    "user_message": currentMessage,
+                    "token": currentUser?.token,
+                    "message_content": '',
+                    "role": "assistant"
+                };
+        
+                let botresponse = await axios.post(`http://45.79.218.138:5000/chat`, botData);
+        
+                // Append the bot's response
+                botData = {
+                    ...botData,
+                    "message_content": botresponse?.data?.assistant_message,
+                    "created": new Date().toISOString().replace('T', ' ').replace('Z', 'Z')
+                };
+        
+                // Add bot message to messages
+                setMessages(prevMessages => [...prevMessages,chatmessage, botData]);
+                // Update message history
+                setMessageHistory(prev => [
+                    ...prev,
+                    {
                         historyConversationBots: {
                             Name: chatBot?.Name,
                             Pic: chatBot?.Pic,
@@ -231,25 +282,34 @@ export default function Chat() {
                         },
                         created: record?.created
                     }
-                    let old = [...prev, data]
-                    return old
-                })
-                handleChatClick(chatBot?.id)
+                ]);
+    
+                handleChatClick(chatBot?.id);
+                
             }
+    
+            // Add user message to messages
+            // setMessages(prevMessages => [...prevMessages, messagerecord]);
+            setCurrentMessage("");  // Clear the message input
+    
 
-
-
-            // const conversationData = await pb.collection('conversations').create(createhistory);
-            // console.log(conversationData)
-            // example create data
-
-
+            setLoading(false);  // Loading complete
+    
         } catch (e) {
-
+            toast.error("Server error while sending messages")
+            console.error("Error sending message:", e);
         }
+    };
+    
+
+    function sortMessagesByCreated(messagesArray) {
+        return messagesArray.sort((a, b) => new Date(a.created) - new Date(b.created));
     }
+
+    
     return (
         <div className="w-full">
+            <ToastContainer/>
             <div className="lg:grid hidden chatbox-desktop h-[100vh]">
                 <div className="py-[20px] px-[20px] flex flex-col h-full lg:border-r-[1px] lg:border-r-[#25273f]">
                     <div className="bg-black border-[1px] border-[#25273f] rounded-[30px] flex mb-[20px]">
@@ -264,12 +324,12 @@ export default function Chat() {
                             Group
                         </span>
                     </div>
-                    <div className="flex flex-col w-full overflow-auto">
+                    <div className="flex flex-col w-full overflow-y-auto h-[500px]">
                         {loading == true ? <div class="flex justify-center items-center h-screen">
                             <div class="animate-spin rounded-full h-32 w-32 border-t-4 border-b-4 border-purple-500"></div>
-                        </div> : messagehistory?.map((user) => (
+                        </div> : messagehistory?.map((user,i) => (
                             <div
-                                key={user?.user_id}
+                                key={user?.user_id?.toString()+i?.toString()}
                                 onClick={() => handleChatClick(user?.chatbot_id)}
                                 className={`w-full py-[10px] px-[6px] border-b-[1px] border-b-[#25273f] hover:cursor-pointer`}
                             >
@@ -285,8 +345,8 @@ export default function Chat() {
                                     </span>
                                     <span className="w-[70%] justify-between ml-[10px] relative">
                                         <span className="flex flex-col">
-                                            <p className="text-[16px] font-bold text-white m-0">{user?.historyConversationBots?.Name}</p>
-                                            <p className="text-[12px] text-white m-0">{user?.message_content}</p>
+                                            <p className="text-[16px] font-bold text-white m-0">{user?.historyConversationBots?.Name?.length>9?user?.historyConversationBots?.Name?.slice(0,8)+'..':user?.historyConversationBots?.Name}</p>
+                                            <p className="text-[12px] text-white m-0">{user?.message_content?.length>20?user?.message_content?.slice(0,19)+'...':user?.message_content}</p>
                                         </span>
                                         <span className="text-[12px] text-[#CFCFCFCF] absolute top-0 right-0">
                                             {formatDate(user?.created)}
@@ -314,13 +374,16 @@ export default function Chat() {
                                     {chatBot?.Description}
                                 </p>
                             </div>
-                            <div className="w-full px-[20px] relative h-[100%] overflow-y-auto chatbox flex-col gap-[40px] mt-[40px] flex">
+                            <div className="w-full px-[20px] relative h-[100%]  chatbox flex-col gap-[40px] mt-[40px] flex">
                                 {loading === true ? <div class="flex justify-center items-center h-screen">
                                     <div class="animate-spin rounded-full h-32 w-32 border-t-4 border-b-4 border-purple-500"></div>
-                                </div> : <div className="w-full px-[20px] relative h-[75%] overflow-y-auto chatbox flex-col gap-[40px] mt-[40px] flex">
-                                    {messages?.map((message, i) => {
-                                        if (message?.chatbot_id == currentBot) {
-                                            return <div key={message?.chatbot_id} className="w-full ai-message flex gap-[10px]">
+                                </div> : <div className="w-full px-[20px] h-[70%]   overflow-y-auto chatbox flex-col gap-[40px] mt-[40px] flex">
+                                    {sortMessagesByCreated(messages)?.map((message, i) => {
+                                       
+                                        
+                                        if (message?.role=="assistant") {
+                                           
+                                            return <div key={message?.chatbot_id?.toString()+i?.toString()} className="w-full ai-message flex gap-[10px]">
                                                 <div className="w-[10%] h-[50px] rounded-[100%] ">
                                                     <img src={`http://data.gmini.ai/api/files/yttfv3r7vgmd959/${chatBot?.id}/` + chatBot?.Pic} alt={chatBot?.Name} className="w-full h-full rounded-[100%]" />
                                                 </div>
@@ -338,7 +401,7 @@ export default function Chat() {
                                             </div>
                                         } else {
 
-                                            return <div key={message?.user_id} className="w-full user-message flex gap-[10px]">
+                                            return <div key={message?.user_id?.toString()+i.toString()} className="w-full user-message flex gap-[10px]">
                                                 <div className="w-[10%] h-[50px] rounded-[100%] ">
                                                     <img src={currentUser?.avatar ? currentUser?.avatar : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT5aCMO24e6ZTz7_TTUdoqiclVyuhAzV0kFw&s"} alt={chatBot?.Name} className="w-full h-full rounded-[100%]" />
                                                 </div>
@@ -438,7 +501,7 @@ export default function Chat() {
                                 </span>
                                 <div className='flex gap-[10px] items-center  py-[20px]'>
                                     {chatBot?.Tags?.map((val, i) => {
-                                        return <span key={val?.tag} className='rounded-[20px] text-white px-[10px] py-[6px] text-[12px] bg-[#433e64b5] '>
+                                        return <span key={val?.tag?.toString()+i?.toString()} className='rounded-[20px] text-white px-[10px] py-[6px] text-[12px] bg-[#433e64b5] '>
                                             {val?.Tag}
                                         </span>
                                     })}
@@ -558,9 +621,9 @@ export default function Chat() {
                             {loading == true ? <div class="flex justify-center items-center h-screen">
                                 <div class="animate-spin rounded-full h-32 w-32 border-t-4 border-b-4 border-purple-500"></div>
                             </div> : <div className=" w-full px-[20px] relative overflow-y-auto chatbox flex-col gap-[40px] mt-[40px] flex">
-                                {messages?.map((message, index) => {
-                                    if (message?.chatbot_id == currentBot) {
-                                        return <div className="w-full ai-message flex gap-[10px]">
+                                {sortMessagesByCreated(messages)?.map((message, index) => {
+                                     if (message?.role=="assistant") {
+                                        return <div key={message?.chatbot_id?.toString()+index.toString()} className="w-full ai-message flex gap-[10px]">
                                             <div className="w-[20%] h-[50px] rounded-[100%] ">
                                                 <img src={`http://data.gmini.ai/api/files/yttfv3r7vgmd959/${chatBot?.id}/` + chatBot?.Pic} alt={chatBot?.Name} className="w-full h-full rounded-[100%]" />
                                             </div>
@@ -577,7 +640,7 @@ export default function Chat() {
                                             </div>
                                         </div>
                                     } else {
-                                        return <div className="w-full user-message flex gap-[10px]">
+                                        return <div  key={message?.user_id?.toString()+index.toString()} className="w-full user-message flex gap-[10px]">
                                             <div className="w-[20%] h-[50px] rounded-[100%] ">
                                                 <img src={currentUser?.avatar ? currentUser?.avatar : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT5aCMO24e6ZTz7_TTUdoqiclVyuhAzV0kFw&s"} alt={chatBot?.Name} className="w-full h-full rounded-[100%]" />
                                             </div>
@@ -619,12 +682,12 @@ export default function Chat() {
                                 </div>
                             </div>
                         </div>
-                    </div> : <div className="flex flex-col w-full overflow-auto">
+                    </div> : <div className="flex flex-col w-full">
                         {loading == true ? <div class="flex justify-center items-center h-screen">
                             <div class="animate-spin rounded-full h-32 w-32 border-t-4 border-b-4 border-purple-500"></div>
-                        </div> : messagehistory?.map((user) => (
+                        </div> : messagehistory?.map((user,i) => (
                             <div
-                                key={user?.chatbot_id}
+                                key={user?.chatbot_id?.toString()+i.toString()}
                                 onClick={() => handleChatClick(user?.chatbot_id)}
                                 className={`w-full py-[10px] px-[6px] border-b-[1px] border-b-[#25273f] hover:cursor-pointer`}
                             >
@@ -640,7 +703,7 @@ export default function Chat() {
                                     <span className="w-[70%] justify-between ml-[10px] relative">
                                         <span className="flex flex-col">
                                             <p className="text-[16px] font-bold text-white m-0">{user?.historyConversationBots?.Name}</p>
-                                            <p className="text-[12px] text-white m-0">{user?.message_content}</p>
+                                            <p className="text-[12px] text-white m-0">{user?.message_content?.length>20?user?.message_content?.slice(0,19)+'...':user?.message_content}</p>
                                         </span>
                                         <span className="text-[12px] text-[#CFCFCFCF] absolute top-0 right-0">
                                             {formatDate(user?.created)}
@@ -648,6 +711,7 @@ export default function Chat() {
                                     </span>
                                 </span>
                             </div>
+                            
                         ))}
                     </div>
                 }

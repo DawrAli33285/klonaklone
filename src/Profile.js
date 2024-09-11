@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./profile.css";
 import PocketBase from 'pocketbase';
+import { ToastContainer, toast } from 'react-toastify';
 export default function Profile() {
     const [tab, setTab] = useState('characters');
     const [currentUser,setCurrentUser]=useState("")
@@ -14,7 +15,7 @@ export default function Profile() {
     const handleUpdatePassword = async() => {
       try{
         if(password?.length==0){
-            alert("enter pass")
+            toast.error("enter new name")
             return
         }
         const data = {
@@ -24,6 +25,11 @@ export default function Profile() {
         console.log("CURRENTUSER")
         console.log(currentUser)
         const record = await pb.collection('users').update(currentUser?.id, data);
+        setCurrentUser({
+            ...currentUser,
+            name:data.name
+        })
+        setPassword("")
           setShowPopup(false); 
       }catch(e){
 
@@ -52,6 +58,7 @@ getProfile()
     },[])
     return (
         <div className="flex flex-col w-full h-[100%]">
+            <ToastContainer/>
           {loading==true?<div class="flex justify-center items-center h-screen">
   <div class="animate-spin rounded-full h-32 w-32 border-t-4 border-b-4 border-purple-500"></div>
 </div>:<>
@@ -107,7 +114,7 @@ getProfile()
             
             <input
               type="text"
-              placeholder="Enter new password"
+              placeholder="Enter new name"
               value={password}
               onChange={handlePasswordChange}
               className="border border-gray-300 p-2 w-full rounded mb-4"
@@ -125,7 +132,7 @@ getProfile()
                 className="bg-green-500 text-white px-4 py-2 rounded"
                 onClick={handleUpdatePassword}
               >
-                Update Password
+                Update name
               </button>
             </div>
           </div>
