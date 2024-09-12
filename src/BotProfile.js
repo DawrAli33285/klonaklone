@@ -292,7 +292,23 @@ const reduceDescription=(desc)=>{
                                     <p className="text-[14px] text-[#CFCFCF]">20 Messages</p>
                                 </div>
                                 <div className="flex flex-col gap-[20px] border-b-[1px] border-b-[#25273F]">
-                                    <div className="w-full ai-message flex gap-[10px]">
+                                <div className="w-full user-message flex gap-[10px]">
+                                        <div className="w-[10%] h-[30px] rounded-[100%] ">
+                                        <img src='http://data.gmini.ai/api/files/yttfv3r7vgmd959/5bg7d0trgmudz0d/williammedina_portrait_of_cybernetic_digital_demon_with_neon_bd25f819_caa8_4ae8_848a_54eb6861a19d_1_gLw85R8KFy.png' alt="avatar" vclassName="w-full h-full rounded-[100%]" />
+                                            {/* <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT5aCMO24e6ZTz7_TTUdoqiclVyuhAzV0kFw&s" alt="avatar" className="w-full h-full rounded-[100%]" /> */}
+                                        </div>
+                                        <div className="flex flex-col gap-[10px] w-[80%]">
+                                            <span className="w-fit py-[10px] px-[20px] flex flex-col user-message-container">
+                                                <p className="text-[14px] text-[#CFCFCFCF] m-0">
+                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
+                                                </p>
+                                                <span className="text-[12px] text-[#CFCFCFCF] self-end usermessage-date">
+                                                    26/08
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    {/* <div className="w-full ai-message flex gap-[10px]">
                                         <div className="w-[10%] h-[30px] rounded-[100%] ">
                                             <img src='http://data.gmini.ai/api/files/yttfv3r7vgmd959/5bg7d0trgmudz0d/williammedina_portrait_of_cybernetic_digital_demon_with_neon_bd25f819_caa8_4ae8_848a_54eb6861a19d_1_gLw85R8KFy.png' alt="avatar" vclassName="w-full h-full rounded-[100%]" />
                                         </div>
@@ -306,18 +322,19 @@ const reduceDescription=(desc)=>{
                                                 </span>
                                             </span>
                                         </div>
-                                    </div>
-                                    <div className="w-full user-message flex gap-[10px]">
+                                    </div> */}
+                                     <div className="w-full ai-message flex gap-[10px]">
                                         <div className="w-[10%] h-[30px] rounded-[100%] ">
-                                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT5aCMO24e6ZTz7_TTUdoqiclVyuhAzV0kFw&s" alt="avatar" className="w-full h-full rounded-[100%]" />
+                                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT5aCMO24e6ZTz7_TTUdoqiclVyuhAzV0kFw&s" alt="avatar" className="w-full h-full rounded-[100%]" />
+                                           
                                         </div>
                                         <div className="flex flex-col gap-[10px] w-[80%]">
-                                            <span className="w-fit py-[10px] px-[20px] flex flex-col user-message-container">
+                                            <span className="w-fit py-[10px] px-[20px] flex flex-col ai-message-container">
                                                 <p className="text-[14px] text-[#CFCFCFCF] m-0">
-                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
+                                                    Lorem ipsum dolor sit
                                                 </p>
-                                                <span className="text-[12px] text-[#CFCFCFCF] self-end usermessage-date">
-                                                    26/08
+                                                <span className="text-[12px] text-[#CFCFCFCF] aimessage-date">
+                                                    06/28
                                                 </span>
                                             </span>
                                         </div>
@@ -342,8 +359,22 @@ const reduceDescription=(desc)=>{
                                     <p className="text-[14px] text-[#CFCFCF]">20 Messages</p>
                                 </div>
                                 <div className="flex flex-col gap-[20px] border-b-[1px] border-b-[#25273F]">
-                                    <div className="w-full ai-message flex gap-[10px]">
-                                        <div className="w-[10%] h-[30px] rounded-[100%] ">
+                                    <div className="w-full user-message flex gap-[10px]">
+                                    <div className="w-[10%] h-[30px] rounded-[100%] ">
+                                    <img src='http://data.gmini.ai/api/files/yttfv3r7vgmd959/5bg7d0trgmudz0d/williammedina_portrait_of_cybernetic_digital_demon_with_neon_bd25f819_caa8_4ae8_848a_54eb6861a19d_1_gLw85R8KFy.png' alt="avatar" vclassName="w-full h-full rounded-[100%]" />
+
+                                        </div>
+                                        <div className="flex flex-col gap-[10px] w-[80%]">
+                                            <span className="w-fit py-[10px] px-[20px] flex flex-col user-message-container">
+                                                <p className="text-[14px] text-[#CFCFCFCF] m-0">
+                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
+                                                </p>
+                                                <span className="text-[12px] text-[#CFCFCFCF] self-end usermessage-date">
+                                                    26/08
+                                                </span>
+                                            </span>
+                                        </div>
+                                        {/* <div className="w-[10%] h-[30px] rounded-[100%] ">
                                             <img src='http://data.gmini.ai/api/files/yttfv3r7vgmd959/5bg7d0trgmudz0d/williammedina_portrait_of_cybernetic_digital_demon_with_neon_bd25f819_caa8_4ae8_848a_54eb6861a19d_1_gLw85R8KFy.png' alt="avatar" vclassName="w-full h-full rounded-[100%]" />
                                         </div>
                                         <div className="flex flex-col gap-[10px] w-[80%]">
@@ -355,19 +386,19 @@ const reduceDescription=(desc)=>{
                                                     06/28
                                                 </span>
                                             </span>
-                                        </div>
+                                        </div> */}
                                     </div>
-                                    <div className="w-full user-message flex gap-[10px]">
-                                        <div className="w-[10%] h-[30px] rounded-[100%] ">
-                                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT5aCMO24e6ZTz7_TTUdoqiclVyuhAzV0kFw&s" alt="avatar" className="w-full h-full rounded-[100%]" />
+                                    <div className="w-full  ai-message flex gap-[10px]">
+                                       <div className="w-[10%] h-[30px] rounded-[100%] ">
+                                       <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT5aCMO24e6ZTz7_TTUdoqiclVyuhAzV0kFw&s" alt="avatar" className="w-full h-full rounded-[100%]" />
                                         </div>
                                         <div className="flex flex-col gap-[10px] w-[80%]">
-                                            <span className="w-fit py-[10px] px-[20px] flex flex-col user-message-container">
+                                            <span className="w-fit py-[10px] px-[20px] flex flex-col ai-message-container">
                                                 <p className="text-[14px] text-[#CFCFCFCF] m-0">
-                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
+                                                    Lorem ipsum dolor sit
                                                 </p>
-                                                <span className="text-[12px] text-[#CFCFCFCF] self-end usermessage-date">
-                                                    26/08
+                                                <span className="text-[12px] text-[#CFCFCFCF] aimessage-date">
+                                                    06/28
                                                 </span>
                                             </span>
                                         </div>
@@ -392,24 +423,9 @@ const reduceDescription=(desc)=>{
                                     <p className="text-[14px] text-[#CFCFCF]">20 Messages</p>
                                 </div>
                                 <div className="flex flex-col gap-[20px] border-b-[1px] border-b-[#25273F]">
-                                    <div className="w-full ai-message flex gap-[10px]">
-                                        <div className="w-[10%] h-[30px] rounded-[100%] ">
-                                            <img src='http://data.gmini.ai/api/files/yttfv3r7vgmd959/5bg7d0trgmudz0d/williammedina_portrait_of_cybernetic_digital_demon_with_neon_bd25f819_caa8_4ae8_848a_54eb6861a19d_1_gLw85R8KFy.png' alt="avatar" vclassName="w-full h-full rounded-[100%]" />
-                                        </div>
-                                        <div className="flex flex-col gap-[10px] w-[80%]">
-                                            <span className="w-fit py-[10px] px-[20px] flex flex-col ai-message-container">
-                                                <p className="text-[14px] text-[#CFCFCFCF] m-0">
-                                                    Lorem ipsum dolor sit
-                                                </p>
-                                                <span className="text-[12px] text-[#CFCFCFCF] aimessage-date">
-                                                    06/28
-                                                </span>
-                                            </span>
-                                        </div>
-                                    </div>
                                     <div className="w-full user-message flex gap-[10px]">
-                                        <div className="w-[10%] h-[30px] rounded-[100%] ">
-                                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT5aCMO24e6ZTz7_TTUdoqiclVyuhAzV0kFw&s" alt="avatar" className="w-full h-full rounded-[100%]" />
+                                         <div className="w-[10%] h-[30px] rounded-[100%] ">
+                                         <img src='http://data.gmini.ai/api/files/yttfv3r7vgmd959/5bg7d0trgmudz0d/williammedina_portrait_of_cybernetic_digital_demon_with_neon_bd25f819_caa8_4ae8_848a_54eb6861a19d_1_gLw85R8KFy.png' alt="avatar" vclassName="w-full h-full rounded-[100%]" />
                                         </div>
                                         <div className="flex flex-col gap-[10px] w-[80%]">
                                             <span className="w-fit py-[10px] px-[20px] flex flex-col user-message-container">
@@ -418,6 +434,24 @@ const reduceDescription=(desc)=>{
                                                 </p>
                                                 <span className="text-[12px] text-[#CFCFCFCF] self-end usermessage-date">
                                                     26/08
+                                                </span>
+                                            </span>
+                                        </div>
+
+                                    </div>
+                                    <div className="w-full ai-message flex gap-[10px]">
+                                      
+<div className="w-[10%] h-[30px] rounded-[100%] ">
+<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT5aCMO24e6ZTz7_TTUdoqiclVyuhAzV0kFw&s" alt="avatar" className="w-full h-full rounded-[100%]" />
+                                          
+                                        </div>
+                                        <div className="flex flex-col gap-[10px] w-[80%]">
+                                            <span className="w-fit py-[10px] px-[20px] flex flex-col ai-message-container">
+                                                <p className="text-[14px] text-[#CFCFCFCF] m-0">
+                                                    Lorem ipsum dolor sit
+                                                </p>
+                                                <span className="text-[12px] text-[#CFCFCFCF] aimessage-date">
+                                                    06/28
                                                 </span>
                                             </span>
                                         </div>
