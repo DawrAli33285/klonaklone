@@ -24,11 +24,12 @@
     width: 90%;
     border-radius: 20px;
     background-color: black;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    /* position: absolute; */
+    /* left: 50%;
+    transform: translateX(-50%); */
     bottom: 2rem;
     padding-block: 10px;
+    margin: auto;
     padding-inline: 10px;
     border:2px solid white;
     display: flex;

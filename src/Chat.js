@@ -261,11 +261,13 @@ toast.error("Server error please try again")
                                 id: chatBot?.id || ''
                             },
                             created: new Date().toISOString().replace('T', ' ').replace('Z', 'Z') || '',
-                            message_content: botresponse?.data?.assistant_message || ''
+                            message_content: botresponse?.data?.assistant_message || '',
+                            chatbot_id:chatBot?.id || ''
                         }
                     ];
                 }
             });
+        
             } else {
                 // New conversation: create a conversation record
                 const record = await pb.collection('conversations').create(data);
@@ -327,19 +329,20 @@ toast.error("Server error please try again")
                                     id: chatBot?.id || ''
                                 },
                                 created: new Date().toISOString().replace('T', ' ').replace('Z', 'Z') || '',
-                                message_content: botresponse?.data?.assistant_message || ''
+                                message_content: botresponse?.data?.assistant_message || '',
+                                chatbot_id:chatBot?.id || ''
                             }
                         ];
                     }
                 });
-                handleChatClick(chatBot?.id);
+                
                 
             }
     
             // Add user message to messages
             // setMessages(prevMessages => [...prevMessages, messagerecord]);
             setCurrentMessage("");  // Clear the message input
-    
+            setSelectedChatId(chatBot?.id);
 
             setLoading(false);  // Loading complete
     
