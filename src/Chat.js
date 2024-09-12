@@ -236,6 +236,36 @@ toast.error("Server error please try again")
     
             // Add bot message to messages
             setMessages(prevMessages => [...prevMessages, chatmessage,botData]);
+            setMessageHistory(prev => {
+                // Check if the current chatbot exists in the previous message history
+                const botExists = prev.some(record => record.historyConversationBots.id === chatBot?.id);
+            
+                if (botExists) {
+                    // Update the existing bot's message_content
+                    return prev.map(record => 
+                        record.historyConversationBots.id === chatBot?.id 
+                            ? {
+                                ...record,
+                                message_content: botresponse?.data?.assistant_message || ''
+                            } 
+                            : record
+                    );
+                } else {
+                    // Add a new record if chatbot doesn't exist
+                    return [
+                        ...prev, 
+                        {
+                            historyConversationBots: {
+                                Name: chatBot?.Name || '',
+                                Pic: chatBot?.Pic || '',
+                                id: chatBot?.id || ''
+                            },
+                            created: new Date().toISOString().replace('T', ' ').replace('Z', 'Z') || '',
+                            message_content: botresponse?.data?.assistant_message || ''
+                        }
+                    ];
+                }
+            });
             } else {
                 // New conversation: create a conversation record
                 const record = await pb.collection('conversations').create(data);
@@ -272,18 +302,36 @@ toast.error("Server error please try again")
                 // Add bot message to messages
                 setMessages(prevMessages => [...prevMessages,chatmessage, botData]);
                 // Update message history
-                setMessageHistory(prev => [
-                    ...prev,
-                    {
-                        historyConversationBots: {
-                            Name: chatBot?.Name,
-                            Pic: chatBot?.Pic,
-                            id: chatBot?.id
-                        },
-                        created: record?.created
+                setMessageHistory(prev => {
+                    // Check if the current chatbot exists in the previous message history
+                    const botExists = prev.some(record => record.historyConversationBots.id === chatBot?.id);
+                
+                    if (botExists) {
+                        // Update the existing bot's message_content
+                        return prev.map(record => 
+                            record.historyConversationBots.id === chatBot?.id 
+                                ? {
+                                    ...record,
+                                    message_content: botresponse?.data?.assistant_message || ''
+                                } 
+                                : record
+                        );
+                    } else {
+                        // Add a new record if chatbot doesn't exist
+                        return [
+                            ...prev, 
+                            {
+                                historyConversationBots: {
+                                    Name: chatBot?.Name || '',
+                                    Pic: chatBot?.Pic || '',
+                                    id: chatBot?.id || ''
+                                },
+                                created: new Date().toISOString().replace('T', ' ').replace('Z', 'Z') || '',
+                                message_content: botresponse?.data?.assistant_message || ''
+                            }
+                        ];
                     }
-                ]);
-    
+                });
                 handleChatClick(chatBot?.id);
                 
             }
