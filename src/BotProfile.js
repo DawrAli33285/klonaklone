@@ -3,16 +3,16 @@ import "./Botprofile.css"
 import "./chat.css"
 import SliderComponent from "./components/sliderComponent";
 import PocketBase from 'pocketbase';
-import { useLocation,useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function BotProfile() {
     const [chatType, setChatType] = useState("comments");
     const [openDropdown, setOpenDropdown] = useState(null);
     const [Comments, setComments] = useState('Popular');
-    const [currentBot,setCurrentBot]=useState()
-    let location=useLocation();
+    const [currentBot, setCurrentBot] = useState()
+    let location = useLocation();
     const pb = new PocketBase('http://data.gmini.ai');
-let navigate=useNavigate()
+    let navigate = useNavigate()
 
     const toggleDropdown = (dropdown) => {
         setOpenDropdown(openDropdown === dropdown ? null : dropdown);
@@ -26,52 +26,52 @@ let navigate=useNavigate()
         setChatType(type)
     }
 
-useEffect(()=>{
-const getBotData=async()=>{
-    try{
-        let params=new URLSearchParams(location.search)
-        let id=params.get('id')
-        let record = await pb.collection('Chatbots').getOne(id, {
-            expand: 'relField1,relField2.subRelField',
-        });
-let tagrecord=record.Tags.map(async(val,i)=>{
-let tagsrecord = await pb.collection('tags').getOne(val, {
-        expand: 'relField1,relField2.subRelField',
-    });
-return tagsrecord
-})
-record.Tags=[]
+    useEffect(() => {
+        const getBotData = async () => {
+            try {
+                let params = new URLSearchParams(location.search)
+                let id = params.get('id')
+                let record = await pb.collection('Chatbots').getOne(id, {
+                    expand: 'relField1,relField2.subRelField',
+                });
+                let tagrecord = record.Tags.map(async (val, i) => {
+                    let tagsrecord = await pb.collection('tags').getOne(val, {
+                        expand: 'relField1,relField2.subRelField',
+                    });
+                    return tagsrecord
+                })
+                record.Tags = []
 
-let tagsData=Promise.all(tagrecord).then((data)=>{
-data.map((val,i)=>{
-    record={
-        ...record,
-        Tags:[...record?.Tags,val.Tag]
+                let tagsData = Promise.all(tagrecord).then((data) => {
+                    data.map((val, i) => {
+                        record = {
+                            ...record,
+                            Tags: [...record?.Tags, val.Tag]
+                        }
+                    })
+
+                    setCurrentBot(record)
+console.log("RECORD IS")
+                    console.log(record)
+
+                })
+
+
+
+            } catch (e) {
+
             }
-        })
+        }
+        getBotData();
+    }, [])
 
-        setCurrentBot(record)
-   
-console.log(record)
-
-})
-
-      
-
-    }catch(e){
-
+    const reduceDescription = (desc) => {
+        if (desc?.length > 30) {
+            return desc?.slice(0, 50) + '....'
+        } else {
+            return desc
+        }
     }
-}
-getBotData();
-},[])
-
-const reduceDescription=(desc)=>{
-    if(desc?.length>30){
-        return desc?.slice(0,15)+'....'
-    }else{
-        return desc
-    }
-}
 
     return (
         <div className="w-full h-[100vh]">
@@ -80,19 +80,20 @@ const reduceDescription=(desc)=>{
                     <div className="px-[10px] py-[20px] flex flex-col gap-[10px] bg-[#3a355793]">
                         <div className="w-full h-[200px] rounded-[20px]">
                             <img src={`http://data.gmini.ai/api/files/yttfv3r7vgmd959/${currentBot?.id}/` + currentBot?.Pic
-                                            } alt="img" className="w-full rounded-[20px] h-full object-cover" />
+                            } alt="img" className="w-full rounded-[20px] h-full object-cover" />
                         </div>
-                        <div className="w-full flex items-center justify-center text-[12px] text-[#CFCFCF]">
-                            @{currentBot?.Name}...
+                        <div className="w-full space-x-2 flex-row flex items-center justify-center text-[12px] text-[#CFCFCF]">
+                            @{currentBot?.Name}
+                            <svg width={30} height={30} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#3d115a"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M21.5609 10.7386L20.2009 9.15859C19.9409 8.85859 19.7309 8.29859 19.7309 7.89859V6.19859C19.7309 5.13859 18.8609 4.26859 17.8009 4.26859H16.1009C15.7109 4.26859 15.1409 4.05859 14.8409 3.79859L13.2609 2.43859C12.5709 1.84859 11.4409 1.84859 10.7409 2.43859L9.17086 3.80859C8.87086 4.05859 8.30086 4.26859 7.91086 4.26859H6.18086C5.12086 4.26859 4.25086 5.13859 4.25086 6.19859V7.90859C4.25086 8.29859 4.04086 8.85859 3.79086 9.15859L2.44086 10.7486C1.86086 11.4386 1.86086 12.5586 2.44086 13.2486L3.79086 14.8386C4.04086 15.1386 4.25086 15.6986 4.25086 16.0886V17.7986C4.25086 18.8586 5.12086 19.7286 6.18086 19.7286H7.91086C8.30086 19.7286 8.87086 19.9386 9.17086 20.1986L10.7509 21.5586C11.4409 22.1486 12.5709 22.1486 13.2709 21.5586L14.8509 20.1986C15.1509 19.9386 15.7109 19.7286 16.1109 19.7286H17.8109C18.8709 19.7286 19.7409 18.8586 19.7409 17.7986V16.0986C19.7409 15.7086 19.9509 15.1386 20.2109 14.8386L21.5709 13.2586C22.1509 12.5686 22.1509 11.4286 21.5609 10.7386ZM16.1609 10.1086L11.3309 14.9386C11.1909 15.0786 11.0009 15.1586 10.8009 15.1586C10.6009 15.1586 10.4109 15.0786 10.2709 14.9386L7.85086 12.5186C7.56086 12.2286 7.56086 11.7486 7.85086 11.4586C8.14086 11.1686 8.62086 11.1686 8.91086 11.4586L10.8009 13.3486L15.1009 9.04859C15.3909 8.75859 15.8709 8.75859 16.1609 9.04859C16.4509 9.33859 16.4509 9.81859 16.1609 10.1086Z" fill="#311a65"></path> </g></svg>
                         </div>
                         <div className="w-full flex items-center justify-center text-[12px] text-center text-[#CFCFCF]">{reduceDescription(currentBot?.Description)}</div>
                         <div className="w-full flex items-center justify-center gap-[10px]">
-                          {currentBot?.Tags?.map((tag,i)=>{
-                            return <span key={currentBot?.id+i} className='rounded-[20px] text-white px-[12px] border-[1px] border-[#CFCFCF] py-[6px] text-[12px] bg-[#433e64b5] '>
-                            {tag}
-                        </span>
-                          })}
-                          
+                            {currentBot?.Tags?.map((tag, i) => {
+                                return <span key={currentBot?.id + i} className='rounded-[20px] text-white px-[12px] border-[1px] border-[#CFCFCF] py-[6px] text-[12px] bg-[#433e64b5] '>
+                                    {tag}
+                                </span>
+                            })}
+
                         </div>
                     </div>
                     <div className="w-full px-[10px] py-[20px]">
@@ -154,7 +155,7 @@ const reduceDescription=(desc)=>{
                                 <p className="text-[#CFCFCF] text-[12px]">Update's Time</p>
                             </div>
                         </div>
-                        <span onClick={(e)=>{
+                        <span onClick={(e) => {
                             navigate(`/chat?id=${currentBot?.id}`)
                         }} className="bg-[#bdb0f9] rounded-[20px] text-[14px] flex h-fit px-[10px] py-[6px] m-auto hover:cursor-pointer">Start Chat</span>
                     </div>
@@ -169,7 +170,7 @@ const reduceDescription=(desc)=>{
                             </span>
                             <span className=" justify-between ml-[10px] relative">
                                 <span className="flex flex-col">
-                                    <p className="text-[14px] font-bold text-white m-0">@SAM TIMOTHY JONAS...</p>
+                                    <p className="text-[14px] font-bold text-white m-0">@{currentBot?.Name}</p>
                                     <p className="text-[10px] text-[#AB9BFE] m-0 underline hover:cursor-pointer">view profile</p>
                                 </span>
                             </span>
@@ -292,9 +293,9 @@ const reduceDescription=(desc)=>{
                                     <p className="text-[14px] text-[#CFCFCF]">20 Messages</p>
                                 </div>
                                 <div className="flex flex-col gap-[20px] border-b-[1px] border-b-[#25273F]">
-                                <div className="w-full user-message flex gap-[10px]">
+                                    <div className="w-full user-message flex gap-[10px]">
                                         <div className="w-[10%] h-[30px] rounded-[100%] ">
-                                        <img src='http://data.gmini.ai/api/files/yttfv3r7vgmd959/5bg7d0trgmudz0d/williammedina_portrait_of_cybernetic_digital_demon_with_neon_bd25f819_caa8_4ae8_848a_54eb6861a19d_1_gLw85R8KFy.png' alt="avatar" vclassName="w-full h-full rounded-[100%]" />
+                                            <img src='http://data.gmini.ai/api/files/yttfv3r7vgmd959/5bg7d0trgmudz0d/williammedina_portrait_of_cybernetic_digital_demon_with_neon_bd25f819_caa8_4ae8_848a_54eb6861a19d_1_gLw85R8KFy.png' alt="avatar" vclassName="w-full h-full rounded-[100%]" />
                                             {/* <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT5aCMO24e6ZTz7_TTUdoqiclVyuhAzV0kFw&s" alt="avatar" className="w-full h-full rounded-[100%]" /> */}
                                         </div>
                                         <div className="flex flex-col gap-[10px] w-[80%]">
@@ -323,10 +324,10 @@ const reduceDescription=(desc)=>{
                                             </span>
                                         </div>
                                     </div> */}
-                                     <div className="w-full ai-message flex gap-[10px]">
+                                    <div className="w-full ai-message flex gap-[10px]">
                                         <div className="w-[10%] h-[30px] rounded-[100%] ">
-                                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT5aCMO24e6ZTz7_TTUdoqiclVyuhAzV0kFw&s" alt="avatar" className="w-full h-full rounded-[100%]" />
-                                           
+                                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT5aCMO24e6ZTz7_TTUdoqiclVyuhAzV0kFw&s" alt="avatar" className="w-full h-full rounded-[100%]" />
+
                                         </div>
                                         <div className="flex flex-col gap-[10px] w-[80%]">
                                             <span className="w-fit py-[10px] px-[20px] flex flex-col ai-message-container">
@@ -360,8 +361,8 @@ const reduceDescription=(desc)=>{
                                 </div>
                                 <div className="flex flex-col gap-[20px] border-b-[1px] border-b-[#25273F]">
                                     <div className="w-full user-message flex gap-[10px]">
-                                    <div className="w-[10%] h-[30px] rounded-[100%] ">
-                                    <img src='http://data.gmini.ai/api/files/yttfv3r7vgmd959/5bg7d0trgmudz0d/williammedina_portrait_of_cybernetic_digital_demon_with_neon_bd25f819_caa8_4ae8_848a_54eb6861a19d_1_gLw85R8KFy.png' alt="avatar" vclassName="w-full h-full rounded-[100%]" />
+                                        <div className="w-[10%] h-[30px] rounded-[100%] ">
+                                            <img src='http://data.gmini.ai/api/files/yttfv3r7vgmd959/5bg7d0trgmudz0d/williammedina_portrait_of_cybernetic_digital_demon_with_neon_bd25f819_caa8_4ae8_848a_54eb6861a19d_1_gLw85R8KFy.png' alt="avatar" vclassName="w-full h-full rounded-[100%]" />
 
                                         </div>
                                         <div className="flex flex-col gap-[10px] w-[80%]">
@@ -389,8 +390,8 @@ const reduceDescription=(desc)=>{
                                         </div> */}
                                     </div>
                                     <div className="w-full  ai-message flex gap-[10px]">
-                                       <div className="w-[10%] h-[30px] rounded-[100%] ">
-                                       <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT5aCMO24e6ZTz7_TTUdoqiclVyuhAzV0kFw&s" alt="avatar" className="w-full h-full rounded-[100%]" />
+                                        <div className="w-[10%] h-[30px] rounded-[100%] ">
+                                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT5aCMO24e6ZTz7_TTUdoqiclVyuhAzV0kFw&s" alt="avatar" className="w-full h-full rounded-[100%]" />
                                         </div>
                                         <div className="flex flex-col gap-[10px] w-[80%]">
                                             <span className="w-fit py-[10px] px-[20px] flex flex-col ai-message-container">
@@ -424,8 +425,8 @@ const reduceDescription=(desc)=>{
                                 </div>
                                 <div className="flex flex-col gap-[20px] border-b-[1px] border-b-[#25273F]">
                                     <div className="w-full user-message flex gap-[10px]">
-                                         <div className="w-[10%] h-[30px] rounded-[100%] ">
-                                         <img src='http://data.gmini.ai/api/files/yttfv3r7vgmd959/5bg7d0trgmudz0d/williammedina_portrait_of_cybernetic_digital_demon_with_neon_bd25f819_caa8_4ae8_848a_54eb6861a19d_1_gLw85R8KFy.png' alt="avatar" vclassName="w-full h-full rounded-[100%]" />
+                                        <div className="w-[10%] h-[30px] rounded-[100%] ">
+                                            <img src='http://data.gmini.ai/api/files/yttfv3r7vgmd959/5bg7d0trgmudz0d/williammedina_portrait_of_cybernetic_digital_demon_with_neon_bd25f819_caa8_4ae8_848a_54eb6861a19d_1_gLw85R8KFy.png' alt="avatar" vclassName="w-full h-full rounded-[100%]" />
                                         </div>
                                         <div className="flex flex-col gap-[10px] w-[80%]">
                                             <span className="w-fit py-[10px] px-[20px] flex flex-col user-message-container">
@@ -440,10 +441,10 @@ const reduceDescription=(desc)=>{
 
                                     </div>
                                     <div className="w-full ai-message flex gap-[10px]">
-                                      
-<div className="w-[10%] h-[30px] rounded-[100%] ">
-<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT5aCMO24e6ZTz7_TTUdoqiclVyuhAzV0kFw&s" alt="avatar" className="w-full h-full rounded-[100%]" />
-                                          
+
+                                        <div className="w-[10%] h-[30px] rounded-[100%] ">
+                                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT5aCMO24e6ZTz7_TTUdoqiclVyuhAzV0kFw&s" alt="avatar" className="w-full h-full rounded-[100%]" />
+
                                         </div>
                                         <div className="flex flex-col gap-[10px] w-[80%]">
                                             <span className="w-fit py-[10px] px-[20px] flex flex-col ai-message-container">
@@ -480,22 +481,85 @@ const reduceDescription=(desc)=>{
                 <div className="w-full border-b-[1px] border-b-[#b3a6ff]">
                     <div className="px-[10px] py-[20px] flex flex-col gap-[10px] bg-[#3a355793]">
                         <div className="w-full h-[200px] rounded-[20px]">
-                            <img src="http://data.gmini.ai/api/files/yttfv3r7vgmd959/5bg7d0trgmudz0d/williammedina_portrait_of_cybernetic_digital_demon_with_neon_bd25f819_caa8_4ae8_848a_54eb6861a19d_1_gLw85R8KFy.png" alt="img" className="w-full rounded-[20px] h-full object-cover" />
+                            <img src={`http://data.gmini.ai/api/files/yttfv3r7vgmd959/${currentBot?.id}/` + currentBot?.Pic
+                            } alt="img" className="w-full rounded-[20px] h-full object-cover" />
                         </div>
-                        <div className="w-full flex items-center justify-center text-[12px] text-[#CFCFCF]">
-                            @SAM TIMOTHY JONAS...
+                        <div className="w-full flex gap-[0.5rem] items-center justify-center text-[12px] text-[#CFCFCF]">
+                            @{currentBot?.Name}
+                            {currentBot?.Link?.length > 0 ? <a href={currentBot?.Link}>
+
+                                <div style={{ border: "1px solid #25273F" }} className="bg-[#060610]  rounded-full h-[33px] w-[33px] flex justify-center items-center">
+                                    <svg width="16" height="18" viewBox="0 0 16 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12.6056 12.039C11.7802 12.039 11.0365 12.3954 10.5204 12.9624L5.87811 10.0872C6.00556 9.76141 6.07091 9.41463 6.07077 9.06479C6.07093 8.71495 6.00559 8.36817 5.87811 8.04237L10.5204 5.16705C11.0366 5.73406 11.7802 6.09064 12.6056 6.09064C14.1604 6.09064 15.4253 4.82574 15.4253 3.2709C15.4253 1.71606 14.1604 0.451294 12.6056 0.451294C11.0508 0.451294 9.78585 1.7162 9.78585 3.27104C9.78578 3.62086 9.85112 3.96761 9.97851 4.29342L5.33634 7.16864C4.8202 6.60163 4.07658 6.24505 3.2512 6.24505C1.69636 6.24505 0.431458 7.51009 0.431458 9.06479C0.431458 10.6196 1.69636 11.8845 3.2512 11.8845C4.07655 11.8845 4.82024 11.5281 5.33634 10.9609L9.97854 13.8362C9.85113 14.162 9.78578 14.5088 9.78585 14.8587C9.78585 16.4134 11.0507 17.6783 12.6056 17.6783C14.1604 17.6783 15.4253 16.4134 15.4253 14.8587C15.4253 13.3038 14.1604 12.039 12.6056 12.039ZM10.814 3.27104C10.814 2.28318 11.6177 1.4795 12.6056 1.4795C13.5934 1.4795 14.3971 2.28318 14.3971 3.27104C14.3971 4.2589 13.5934 5.06258 12.6056 5.06258C11.6177 5.06258 10.814 4.25886 10.814 3.27104ZM3.2512 10.8563C2.2632 10.8563 1.45953 10.0526 1.45953 9.06479C1.45953 8.07696 2.2632 7.27325 3.2512 7.27325C4.23906 7.27325 5.0426 8.07696 5.0426 9.06479C5.0426 10.0526 4.23903 10.8563 3.2512 10.8563ZM10.814 14.8586C10.814 13.8707 11.6177 13.067 12.6056 13.067C13.5934 13.067 14.3971 13.8707 14.3971 14.8585C14.3971 15.8464 13.5934 16.6501 12.6056 16.6501C11.6177 16.6501 10.814 15.8464 10.814 14.8585V14.8586Z" fill="white" />
+                                    </svg>
+
+                                </div>
+
+                            </a>
+                                : ``}
                         </div>
-                        <div className="w-full flex items-center justify-center text-[12px] text-center text-[#CFCFCF]">Lorem ipsum dolor sit amet, consectetur adipisci elit, sed...</div>
+                        <div className="w-full flex items-center justify-center text-[12px] text-center text-[#CFCFCF]">{reduceDescription(currentBot?.Description)}</div>
+                        <div className="w-[100%] flex space-x-2 flex-row justify-center items-center">
+                            {currentBot?.Telegram_link?.length > 0 ?
+                                <a href={currentBot?.TikTok_user}>
+                                    <div style={{ border: "1px solid #25273F" }} className="bg-[#060610] rounded-full h-[40px] w-[40px] flex justify-center items-center">
+                                        <svg width={15} height={15} fill="#fcfcfc" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="#fcfcfc"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>tiktok</title> <path d="M16.656 1.029c1.637-0.025 3.262-0.012 4.886-0.025 0.054 2.031 0.878 3.859 2.189 5.213l-0.002-0.002c1.411 1.271 3.247 2.095 5.271 2.235l0.028 0.002v5.036c-1.912-0.048-3.71-0.489-5.331-1.247l0.082 0.034c-0.784-0.377-1.447-0.764-2.077-1.196l0.052 0.034c-0.012 3.649 0.012 7.298-0.025 10.934-0.103 1.853-0.719 3.543-1.707 4.954l0.020-0.031c-1.652 2.366-4.328 3.919-7.371 4.011l-0.014 0c-0.123 0.006-0.268 0.009-0.414 0.009-1.73 0-3.347-0.482-4.725-1.319l0.040 0.023c-2.508-1.509-4.238-4.091-4.558-7.094l-0.004-0.041c-0.025-0.625-0.037-1.25-0.012-1.862 0.49-4.779 4.494-8.476 9.361-8.476 0.547 0 1.083 0.047 1.604 0.136l-0.056-0.008c0.025 1.849-0.050 3.699-0.050 5.548-0.423-0.153-0.911-0.242-1.42-0.242-1.868 0-3.457 1.194-4.045 2.861l-0.009 0.030c-0.133 0.427-0.21 0.918-0.21 1.426 0 0.206 0.013 0.41 0.037 0.61l-0.002-0.024c0.332 2.046 2.086 3.59 4.201 3.59 0.061 0 0.121-0.001 0.181-0.004l-0.009 0c1.463-0.044 2.733-0.831 3.451-1.994l0.010-0.018c0.267-0.372 0.45-0.822 0.511-1.311l0.001-0.014c0.125-2.237 0.075-4.461 0.087-6.698 0.012-5.036-0.012-10.060 0.025-15.083z"></path> </g></svg>
+                                    </div>
+
+                                </a> : ``}
+
+                            {currentBot?.Telegram_link?.length > 0 ?
+                                <a href={currentBot?.Telegram_link}>
+                                    <div style={{ border: "1px solid #25273F" }} className="bg-[#060610] rounded-full h-[40px] w-[40px] flex justify-center items-center">
+                                        <svg width="19" height="17" viewBox="0 0 19 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M19 0.853694L15.9949 16.0048C15.9949 16.0048 15.5748 17.0554 14.4188 16.5511L7.45295 11.2195C8.38923 10.3779 15.6527 3.8477 15.9704 3.55157C16.4613 3.09326 16.1567 2.82051 15.5859 3.16711L4.85713 9.98045L0.717912 8.58698C0.717912 8.58698 0.0662655 8.35579 0.00355013 7.85147C-0.0595363 7.34715 0.739064 7.07402 0.739064 7.07402L17.6132 0.454394C17.6132 0.454394 19 -0.154947 19 0.853694Z" fill="white" />
+                                        </svg>
+
+                                    </div>
+
+                                </a> : ``}
+                            {currentBot?.Instagram_handle?.length > 0 ? <a href={currentBot?.Instagram_handle}>
+                                <div style={{ border: "1px solid #25273F" }} className="bg-[#060610] rounded-full h-[40px] w-[40px] flex justify-center items-center">
+                                    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M7.50002 4.74902C5.98202 4.74902 4.74902 5.98202 4.74902 7.50002C4.74902 9.01802 5.98202 10.254 7.50002 10.254C9.01802 10.254 10.254 9.01802 10.254 7.50002C10.254 5.98202 9.01802 4.74902 7.50002 4.74902Z" fill="white" />
+                                        <path d="M11.652 0H3.348C1.503 0 0 1.503 0 3.348V11.652C0 13.5 1.503 15 3.348 15H11.652C13.5 15 15 13.5 15 11.652V3.348C15 1.503 13.5 0 11.652 0ZM7.5 12.36C4.821 12.36 2.64 10.179 2.64 7.5C2.64 4.821 4.821 2.643 7.5 2.643C10.179 2.643 12.36 4.821 12.36 7.5C12.36 10.179 10.179 12.36 7.5 12.36ZM12.462 3.525C11.895 3.525 11.433 3.066 11.433 2.499C11.433 1.932 11.895 1.47 12.462 1.47C13.029 1.47 13.491 1.932 13.491 2.499C13.491 3.066 13.029 3.525 12.462 3.525Z" fill="white" />
+                                    </svg>
+
+                                </div>
+                            </a> : ``}
+
+
+                        </div>
                         <div className="w-full flex items-center justify-center gap-[10px]">
-                            <span className='rounded-[20px] text-white px-[12px] border-[1px] border-[#CFCFCF] py-[6px] text-[12px] bg-[#433e64b5] '>
-                                Straight
-                            </span>
-                            <span className='rounded-[20px] text-white px-[12px] border-[1px] border-[#CFCFCF] py-[6px] text-[12px] bg-[#433e64b5] '>
-                                Anime
-                            </span>
+                            {currentBot?.Tags?.map((tag, i) => {
+                                return <span key={currentBot?.id + i} className='rounded-[20px] text-white px-[12px] border-[1px] border-[#CFCFCF] py-[6px] text-[12px] bg-[#433e64b5] '>
+                                    {tag}
+                                </span>
+                            })}
                         </div>
                     </div>
                 </div>
+{currentBot?.Link?.length>0?                <a href={currentBot?.Link}>
+                    <div className="collin-div flex rounded-[20px] flex-row h-[200px] w-[90%] mt-[1rem] ml-[1rem]">
+                        <div className="flex-grow h-full w-[40rem]">
+                            <img
+                                style={{ borderRadius: '12px 0px 0px 12px' }}
+                                className="w-full h-full object-cover"
+                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT5aCMO24e6ZTz7_TTUdoqiclVyuhAzV0kFw&s"
+                            />
+                        </div>
+                        <div className="flex-grow rounded-tr-[20px] rounded-br-[20px]  text-white px-[2rem] py-[1rem] flex flex-col justify-center" style={{ background: "linear-gradient(90deg, rgba(196, 184, 249, 0.1) 0%, rgba(171, 155, 254, 0.1) 100%)" }}>
+                            <h3 className="font-bold text-[20px]">Colin</h3>
+                            <p style={{ color: '#FFFFFF' }} className="py-[0.5rem]">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                            </p>
+                        </div>
+                    </div>
+                </a>:``}
+                <span onClick={(e) => {
+                    navigate(`/chat?id=${currentBot?.id}`)
+                }} className="bg-[#bdb0f9] my-[20px] rounded-[10px] w-[60%]  text-[14px]  h-[3rem] text-center flex items-center justify-center px-[10px] py-[6px] m-auto hover:cursor-pointer">Start Chat</span>
+
                 <div className="grid grid-cols-1 px-[20px] gap-[20px] py-[40px] bg-[#3a355729] border-b-[1px] border-b-[#25273f]">
                     <div className="flex flex-col gap-[20px]">
                         <p className="text-white font-semibold text-[14px]">Sharing a bed with your enemy</p>
@@ -536,7 +600,7 @@ const reduceDescription=(desc)=>{
                             <p className="text-[#CFCFCF] text-[12px]">Update's Time</p>
                         </div>
                     </div>
-                    <span className="bg-[#bdb0f9] rounded-[20px] text-[14px] flex h-fit px-[10px] py-[6px] m-auto hover:cursor-pointer">Start Chat</span>
+
                 </div>
                 {/* character defination */}
                 <div className="w-full px-[10px] py-[20px]">

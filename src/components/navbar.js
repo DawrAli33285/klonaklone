@@ -95,7 +95,7 @@ export default function NavBar({ children }) {
                     navigate('/subscription');
                     break;
                     case '8':
-                        navigate('/login')
+                 navigate('/login')
                         case '9':
                             navigate('/game')
             default:
@@ -285,7 +285,7 @@ export default function NavBar({ children }) {
                                     {
                                         key: '9',
                                         icon: <FaGamepad />,
-                                        label: 'Game    ',
+                                        label: 'Game',
                                     },
                                 ],
                             },
@@ -315,7 +315,8 @@ export default function NavBar({ children }) {
                 </Sider>
             </div>
             <div className='main-data-container'>
-                <navbar className="w-full  flex justify-between items-center py-[10px] pl-[40px] pr-[80px] border-b-[1px] border-[#25273f]">
+            <navbar className="w-full flex justify-between items-center py-[10px] pl-[40px] pr-[80px] border-b-[1px] border-[#25273f] opacity-50 md:opacity-100">
+
                     <h2 className='text-white text-[24px] hidden md:flex'>Home</h2>
                     <div className='flex -mx-[1rem] w-[100%] flex-row justify-between '>
                         <h3 className={`text-[#b4a5fd] md:hidden text-[32px] font-bold ${collapsed ? 'hidden' : 'block'}`} >LOGO</h3>

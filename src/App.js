@@ -396,9 +396,9 @@ useEffect(()=>{
                   <div className='flex gap-[10px] items-center p-[10px] lg:px-[20px] py-[20px]'>
                   {pep?.Tags?.map((tag,j)=>{
                     
-                    return <span key={j.toString()} className='rounded-[20px] px-[10px] py-[6px] text-[16px] border'>
-                   {tag[j]?.Tag}
-                  </span>
+                    return tag[j]?.Tag?.length>0?<span key={j.toString()} className='rounded-[20px] px-[10px] py-[6px] text-[16px] border'>
+                    {tag[j]?.Tag}
+                   </span>:``
                   })}
                   </div>
                 </div>
